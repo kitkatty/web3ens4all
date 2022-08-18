@@ -4,6 +4,7 @@ import { IpfsErrorsEnum } from '../../error-enums';
 import { IpfsStatesEnum } from '../../ipfs';
 
 export interface PagesStateModel {
+  pageVisibility?: boolean;
   criticalErrorOccured?: boolean;
   currentPageId?: PagesEnum;
   currentPageSlide?: number;

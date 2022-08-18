@@ -14,6 +14,11 @@ export const getCurrentNetworkState = createSelector(
   (state: PagesStateModel) => state.networkStatus
 );
 
+export const getCurrentPageVisibility = createSelector(
+  getPagesState,
+  (state: PagesStateModel) => state.pageVisibility
+);
+
 export const getCurrentNetworkChainId = createSelector(
   getPagesState,
   (state: PagesStateModel) => state.networkChainCode

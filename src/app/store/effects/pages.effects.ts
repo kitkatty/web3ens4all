@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
 import { select, Store } from '@ngrx/store';
-import { Injectable, NgZone } from '@angular/core';
+import { HostListener, Injectable, NgZone } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   Actions,
@@ -22,6 +22,7 @@ import {
   PagesNetworkStateSet,
   PagesSetChainCode,
   PagesSetCriticalError,
+  PagesSetVisibility,
   SetPageChainCode,
   SetPagesCriticalError,
   SetPagesNetworkState,
@@ -44,7 +45,6 @@ import {
   filter,
   map,
   switchMap,
-  take,
   takeUntil,
   withLatestFrom,
 } from 'rxjs/operators';
@@ -63,7 +63,19 @@ export class PagesEffects {
     protected userService: UserService,
     public dialog: MatDialog,
     public ngZone: NgZone
-  ) {}
+  ) {
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+        if (document.hidden) {
+          this.store.dispatch(new PagesSetVisibility(false));
+        } else {
+          this.store.dispatch(new PagesSetVisibility(true));
+        }
+      },
+      false
+    );
+  }
 
   init$ = createEffect(
     () =>

@@ -12,10 +12,12 @@ import {
   SetPagesNewPageState,
   SetPagesPageSlide,
   SetPagesState,
+  SetPagesVisibility,
   ShowLoadingProgressBarOnLoad,
 } from '../actions';
 
 const initialPagesState: PagesStateModel = {
+  pageVisibility: true,
   criticalErrorOccured: false,
   currentPageId: generalConfigurations.defaultPage,
   currentPageSlide: 0,
@@ -50,6 +52,14 @@ export function PagesReducers(
         currentPageSlide: state.currentPageSlide,
         errorCode:
           'errorCode' in action.payload ? action.payload.errorCode : undefined,
+      };
+      return newState;
+    }
+
+    case SetPagesVisibility: {
+      const newState = {
+        ...state,
+        pageVisibility: action.payload,
       };
       return newState;
     }

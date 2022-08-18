@@ -9,6 +9,7 @@ import {
   getCurrentErrorCode,
   getCurrentPageLoadState,
   getCurrentPagesState,
+  getCurrentPageVisibility,
   getIpfsError,
   getIpfsState,
 } from '../selectors';
@@ -45,6 +46,7 @@ export class PagesFacadeService {
   pageErrorCode$: Observable<string>;
   pageLoadingState$: Observable<boolean>;
   pageCritiaclError$: Observable<boolean>;
+  pageVisibility$: Observable<boolean>;
 
   constructor(
     public router: Router,
@@ -60,6 +62,7 @@ export class PagesFacadeService {
     this.pagesIpfsError$ = this.store.pipe(select(getIpfsError));
     this.pageLoadingState$ = this.store.pipe(select(getCurrentPageLoadState));
     this.pageCritiaclError$ = this.store.pipe(select(getCriticalErrorState));
+    this.pageVisibility$ = this.store.pipe(select(getCurrentPageVisibility));
   }
 
   showLoadingProgressBar() {

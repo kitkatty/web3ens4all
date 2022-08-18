@@ -26,7 +26,7 @@ import {
   PaymentStateModel,
   PaymentTypesEnum,
 } from '../../models/states/payment-interfaces';
-import { UserFacadeService } from '../facades';
+import { PagesFacadeService, UserFacadeService } from '../facades';
 import { MetamaskService } from '../../services/metamask';
 import {
   AddOnePayment,
@@ -75,6 +75,7 @@ export class PaymentEffects {
     protected paymentService: PaymentService,
     protected walletService: WalletService,
     protected userService: UserService,
+    protected pagesFacade: PagesFacadeService,
     protected paymentErrorService: PaymentErrorService,
     protected userFacadeService: UserFacadeService,
     protected store: Store<PaymentStateModel>,
@@ -232,7 +233,7 @@ export class PaymentEffects {
             }
           }
         ),
-        map(([action, hash, nonce]) => {
+        switchMap(([action, hash, nonce]) => {
           if (hash === false) {
             this.store.dispatch(new PaymentRemoveOne(action.payload.id));
             this.snackBar.open(
@@ -244,7 +245,7 @@ export class PaymentEffects {
                 duration: 15000,
               }
             );
-            return;
+            return of(false);
           }
           this.store.dispatch(
             new PaymentUpsertOne({
@@ -254,11 +255,30 @@ export class PaymentEffects {
               paymentNonce: nonce,
             })
           );
-          this.store.dispatch(
-            new CheckPaymentFulfilled({
-              ...action.payload,
-              paymentHash: hash,
-              paymentNonce: nonce,
+          const paymentResolved = new Subject<boolean>();
+          return this.pagesFacade.pageVisibility$.pipe(
+            withLatestFrom(this.store.pipe(select(getPayments))),
+            takeUntil(paymentResolved),
+            map((pvp) => {
+              const [pv, payments] = pvp;
+              const payment = payments[action.payload.id];
+              if (
+                payment &&
+                'paymentStatus' in payment &&
+                payment.paymentStatus === true
+              ) {
+                paymentResolved.next(false);
+                return;
+              }
+              if (pv === true) {
+                this.store.dispatch(
+                  new CheckPaymentFulfilled({
+                    ...action.payload,
+                    paymentHash: hash,
+                    paymentNonce: nonce,
+                  })
+                );
+              }
             })
           );
         })

@@ -18,10 +18,16 @@ export const SetPageIpfsState = '[PagesState] ipfs state set.';
 export const SetPageChainCode = '[PagesState] chain code set.';
 export const SetPagesNewPageState = '[PagesState] New state set.';
 export const SetPagesNetworkState = '[PagesState] New network state set.';
+export const SetPagesVisibility = '[PagesState] visibility state set.';
 export const SetPagesNetworkStateOffline =
   '[PagesState] Offline network state procedure invoke.';
 export const GetPagesState = '[PagesState] Latest state retrieved.';
 export const GotoPageRoute = '[PagesState] Going to page route.';
+
+export class PagesSetVisibility implements Action {
+  readonly type = SetPagesVisibility;
+  constructor(public payload: boolean) {}
+}
 
 export class PagesSetCriticalError implements Action {
   readonly type = SetPagesCriticalError;
