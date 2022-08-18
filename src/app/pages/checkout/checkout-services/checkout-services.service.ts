@@ -354,7 +354,9 @@ export class CheckoutServicesService {
       })
       .reduce((a, b) => {
         return a.add(b);
-      });
+      })
+      .mul(parseInt((totalBufferEnsureSuccess * 100).toString(), 10))
+      .div(100);
     return this.registrationFacilityService
       .completeRegistration(
         compiledPacket,
@@ -381,10 +383,7 @@ export class CheckoutServicesService {
             paymentDate: new Date().getTime(),
             paymentType: PaymentTypesEnum.REGISTER,
             paymentAbstractBytesSlot: registrationPacket,
-            paymentTotal: finalTotal
-              .mul(parseInt((totalBufferEnsureSuccess * 100).toString(), 10))
-              .div(100)
-              .toHexString(),
+            paymentTotal: finalTotal.toHexString(),
             paymentStatus: false,
             paymentGasLimit: gasLimit,
             paymentRawRecord: compiledPacket,
@@ -395,7 +394,6 @@ export class CheckoutServicesService {
           this.paymentFacade.createPayment(p);
         }),
         catchError((e) => {
-          console.log(e);
           this.showErrorOnContractThrown();
           return of(false);
         })

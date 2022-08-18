@@ -1,4 +1,12 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { MatInput } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { select, Store } from '@ngrx/store';
 import { map, withLatestFrom } from 'rxjs/operators';
@@ -25,9 +33,9 @@ import { environment } from 'src/environments/environment';
 })
 export class BulkSearchComponent implements OnInit, OnDestroy {
   spinnerModes: typeof SpinnerModesEnum = SpinnerModesEnum;
+  @ViewChild('prefix') prefix: ElementRef;
+  @ViewChild('suffix') suffix: ElementRef;
   @Input() searchKeyword = '';
-  @Input() prefix = '';
-  @Input() suffix = '';
   registrationListOpen = false;
   registrationListLoaded = false;
   registrationDomains: ENSDomainMetadataModel[] = [];
@@ -219,8 +227,8 @@ export class BulkSearchComponent implements OnInit, OnDestroy {
       this.bulkSearchAdvancedOpen = !this.bulkSearchAdvancedOpen;
       return;
     }
-    this.prefix = '';
-    this.suffix = '';
+    this.prefix.nativeElement.value = '';
+    this.suffix.nativeElement.value = '';
     this.bulkSearchOpen = !this.bulkSearchOpen;
   }
 
@@ -268,14 +276,14 @@ export class BulkSearchComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    const prefix = this.prefix.replaceAll(/[^a-z0-9]/gi, '');
-    if (this.prefix !== '' && prefix !== '') {
+    const prefix = this.prefix.nativeElement.value;
+    if (prefix !== '' && prefix !== '') {
       toFind = toFind.map((d) => {
         return prefix + d;
       });
     }
-    const suffix = this.suffix.replaceAll(/[^a-z0-9]/gi, '');
-    if (this.suffix !== '' && suffix !== '') {
+    const suffix = this.suffix.nativeElement.value;
+    if (suffix !== '' && suffix !== '') {
       toFind = toFind.map((d) => {
         return d + suffix;
       });
