@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
 import { select, Store } from '@ngrx/store';
-import { HostListener, Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   Actions,

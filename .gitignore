@@ -2,6 +2,7 @@
 
 # compiled output
 /src/dev-environments/alchemy-provider.conf
+/src/dev-environments/alchemy-provider.test.conf
 /src/environments
 /tmp
 /out-tsc

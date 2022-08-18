@@ -77,7 +77,6 @@ export class UserEffects {
             this.store.dispatch(new UserRemove());
             return;
           }
-          // ALLOW THE USER TO "QUIT SESSION" through logout button or "change" button on checkout
           this.store.dispatch(
             new UserAdd(JSON.parse(userSessionStored as string))
           );

@@ -76,7 +76,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   currentUserData: UserModel;
   pagesState: PagesStateModel;
   paymentState: PaymentStateModel;
-
   registrationDomains: ENSDomainMetadataModel[] = [];
   registrationStatusTypes: typeof ENSRegistrationStepsEnum =
     ENSRegistrationStepsEnum;
@@ -280,6 +279,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 ENSRegistrationStepsEnum.BEFORE_COMMIT
             ) {
               this.checkoutService.showCartEmptyDialog();
+              this.removeLastStaleBeforeCommitPayment();
               return;
             }
             this.performBulkSearch(
@@ -448,6 +448,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.registrationPreviousStatus === ENSRegistrationStepsEnum.BEFORE_COMMIT
     ) {
       this.checkoutService.showCartEmptyDialog();
+      this.removeLastStaleBeforeCommitPayment();
+    }
+  }
+
+  removeLastStaleBeforeCommitPayment() {
+    const lastPayment = Object.keys(this.paymentState.entities)
+      .map((p) => {
+        const payment = this.paymentState.entities[p];
+        return payment;
+      })
+      .sort((a, b) => b.paymentDate - a.paymentDate)[0];
+
+    if (lastPayment.paymentType === PaymentTypesEnum.COMMIT) {
+      this.paymentFacade.removePayment(lastPayment);
     }
   }
 

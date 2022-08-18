@@ -13,7 +13,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import WalletConnect from '@walletconnect/client';
 import { of, Subject, timer } from 'rxjs';
 import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
-import { generalConfigurations } from 'src/app/configurations';
+import { generalConfigurations, privatePages } from 'src/app/configurations';
 import { HeaderControlModel } from 'src/app/models/states/header-interfaces';
 import {
   PagesEnum,
@@ -290,10 +290,7 @@ export class MainHeaderComponent implements OnInit, OnDestroy {
   }
 
   goToDomain(domain: string) {
-    this.pagesFacadeService.gotoPageRoute(
-      'domain/' + domain,
-      PagesEnum.PROFILE
-    );
+    this.pagesFacadeService.gotoPageRoute('domain/' + domain, PagesEnum.DOMAIN);
   }
 
   get quickSearchKeysToChunk() {
@@ -362,6 +359,7 @@ export class MainHeaderComponent implements OnInit, OnDestroy {
         }
         if (
           this.pagesState.currentPageId !== PagesEnum.HOME &&
+          privatePages.indexOf(PagesEnum[this.pagesState.currentPageId]) > -1 &&
           this.goingHome === false
         ) {
           this.goingHome = true;
