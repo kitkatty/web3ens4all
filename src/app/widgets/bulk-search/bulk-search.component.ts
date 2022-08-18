@@ -227,8 +227,12 @@ export class BulkSearchComponent implements OnInit, OnDestroy {
       this.bulkSearchAdvancedOpen = !this.bulkSearchAdvancedOpen;
       return;
     }
-    this.prefix.nativeElement.value = '';
-    this.suffix.nativeElement.value = '';
+    if (this.prefix !== undefined) {
+      this.prefix.nativeElement.value = '';
+    }
+    if (this.suffix !== undefined) {
+      this.suffix.nativeElement.value = '';
+    }
     this.bulkSearchOpen = !this.bulkSearchOpen;
   }
 
@@ -276,17 +280,21 @@ export class BulkSearchComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    const prefix = this.prefix.nativeElement.value;
-    if (prefix !== '' && prefix !== '') {
-      toFind = toFind.map((d) => {
-        return prefix + d;
-      });
+    if (this.prefix !== undefined) {
+      const prefix = this.prefix.nativeElement.value;
+      if (prefix !== '' && prefix !== '') {
+        toFind = toFind.map((d) => {
+          return prefix + d;
+        });
+      }
     }
-    const suffix = this.suffix.nativeElement.value;
-    if (suffix !== '' && suffix !== '') {
-      toFind = toFind.map((d) => {
-        return d + suffix;
-      });
+    if (this.suffix !== undefined) {
+      const suffix = this.suffix.nativeElement.value;
+      if (suffix !== '' && suffix !== '') {
+        toFind = toFind.map((d) => {
+          return d + suffix;
+        });
+      }
     }
     toFind = [...new Set(toFind)];
     return toFind;
