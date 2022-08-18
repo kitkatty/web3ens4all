@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ethers } from 'ethers';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { ENSContracts } from 'src/app/configurations';
 import { ENSDomainMetadataModel } from 'src/app/models/canvas';
 import {
@@ -26,6 +26,7 @@ import {
 import { GenericDialogComponent } from 'src/app/widgets/generic-dialog';
 
 const globalAny: any = global;
+const totalBufferEnsureSuccess = 1.05;
 
 export interface AssetRegistrationStatusModel {
   trackedPayment?: PaymentModel;
@@ -380,7 +381,10 @@ export class CheckoutServicesService {
             paymentDate: new Date().getTime(),
             paymentType: PaymentTypesEnum.REGISTER,
             paymentAbstractBytesSlot: registrationPacket,
-            paymentTotal: finalTotal.toHexString(),
+            paymentTotal: finalTotal
+              .mul(totalBufferEnsureSuccess * 100)
+              .div(100)
+              .toHexString(),
             paymentStatus: false,
             paymentGasLimit: gasLimit,
             paymentRawRecord: compiledPacket,
