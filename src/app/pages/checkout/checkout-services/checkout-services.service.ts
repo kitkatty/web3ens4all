@@ -382,7 +382,7 @@ export class CheckoutServicesService {
             paymentType: PaymentTypesEnum.REGISTER,
             paymentAbstractBytesSlot: registrationPacket,
             paymentTotal: finalTotal
-              .mul(totalBufferEnsureSuccess * 100)
+              .mul(parseInt((totalBufferEnsureSuccess * 100).toString(), 10))
               .div(100)
               .toHexString(),
             paymentStatus: false,
@@ -395,6 +395,7 @@ export class CheckoutServicesService {
           this.paymentFacade.createPayment(p);
         }),
         catchError((e) => {
+          console.log(e);
           this.showErrorOnContractThrown();
           return of(false);
         })
