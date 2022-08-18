@@ -26,7 +26,7 @@ import {
 import { GenericDialogComponent } from 'src/app/widgets/generic-dialog';
 
 const globalAny: any = global;
-const totalBufferEnsureSuccess = 1.05;
+const totalBufferEnsureSuccess = 1.15;
 
 export interface AssetRegistrationStatusModel {
   trackedPayment?: PaymentModel;
